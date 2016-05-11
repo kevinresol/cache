@@ -1,0 +1,7 @@
+{
+  "name": "cache",
+  "classPath": "src",
+  "dependencies": {
+      "tink_core": ""
+  }
+}
