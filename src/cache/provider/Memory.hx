@@ -4,9 +4,9 @@ import haxe.Timer;
 import cache.Provider;
 using tink.CoreApi;
 
-class Memory<T> implements Provider<T> {
+class Memory implements Provider {
 	
-	var map:Map<String, {value:T, expiry:Float}>;
+	var map:Map<String, {value:Dynamic, expiry:Float}>;
 	var noiseSurprise:Surprise<Noise, Error>;
 	var trueSurprise:Surprise<Bool, Error>;
 	var falseSurprise:Surprise<Bool, Error>;
@@ -20,13 +20,13 @@ class Memory<T> implements Provider<T> {
 		clearExpired();
 	}
 	
-	public function set(key:String, value:T, ?options:SetOptions):Surprise<Noise, Error> {
+	public function set<T>(key:String, value:T, ?options:SetOptions):Surprise<Noise, Error> {
 		var expiry = options != null && options.expiry != null ? getTime() + options.expiry : null;
 		map.set(key, {value: value, expiry: getTime() + options.expiry});
 		return noiseSurprise;
 	}
 	
-	public function get(key:String, ?options:GetOptions):Surprise<T, Error> {
+	public function get<T>(key:String, ?options:GetOptions):Surprise<T, Error> {
 		return Future.sync(Success(switch map.get(key) {
 			case null: null;
 			case v: v.value;

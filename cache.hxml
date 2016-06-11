@@ -1,5 +1,7 @@
 -cp tests
 -main RunTests
--neko bin/test.n
+-js bin/test.js
+-lib hxnodejs
 -lib cache
 -lib buddy
+-lib extern-js-redis

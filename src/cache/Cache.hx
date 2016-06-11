@@ -4,19 +4,19 @@ import cache.Provider;
 
 using tink.CoreApi;
 
-class Cache<T> implements Provider<T> {
+class Cache implements Provider {
 	
-	var providers:Array<Provider<T>>;
+	var providers:Array<Provider>;
 	
 	public function new() {
 		providers = [];
 	}
 	
-	public function addProvider(provider:Provider<T>) {
+	public function addProvider(provider:Provider) {
 		if(providers.indexOf(provider) == -1) providers.push(provider);
 	}
 	
-	public function set(key:String, value:T, ?options:SetOptions):Surprise<Noise, Error> {
+	public function set<T>(key:String, value:T, ?options:SetOptions):Surprise<Noise, Error> {
 		
 		return Future.ofMany([for(provider in providers) provider.set(key, value, options)]) >>
 			function(outcomes:Array<Outcome<Noise, Error>>) {
@@ -33,7 +33,7 @@ class Cache<T> implements Provider<T> {
 			}
 	}
 	
-	public function get(key:String, ?options:GetOptions):Surprise<T, Error> {
+	public function get<T>(key:String, ?options:GetOptions):Surprise<T, Error> {
 	
 		return Future.async(function(cb) {
 			
