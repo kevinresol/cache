@@ -22,7 +22,7 @@ class Memory implements Provider {
 	
 	public function set<T>(key:String, value:T, ?options:SetOptions):Surprise<Noise, Error> {
 		var expiry = options != null && options.expiry != null ? getTime() + options.expiry : null;
-		map.set(key, {value: value, expiry: getTime() + options.expiry});
+		map.set(key, {value: value, expiry: expiry});
 		return noiseSurprise;
 	}
 	
@@ -45,7 +45,7 @@ class Memory implements Provider {
 	function clearExpired() {
 		var now = getTime();
 		for(key in map.keys())
-			if(now > map[key].expiry)
+			if(map[key].expiry != null && now > map[key].expiry)
 				map.remove(key);
 		Timer.delay(clearExpired, clearInterval);
 	}
