@@ -29,7 +29,15 @@ class Memory implements Provider {
 	public function get<T>(key:String, ?options:GetOptions):Surprise<T, Error> {
 		return Future.sync(Success(switch map.get(key) {
 			case null: null;
-			case v: v.value;
+			case v if(!expired(Date.now().getTime(), v.expiry)): v.value;
+			case v: map.remove(key); null; // passive expiry
+		}));
+	}
+	
+	public function increment(key:String, by = 1):Surprise<Int, Error> {
+		return Future.sync(Success(switch map.get(key) {
+			case null: map.set(key, {value: by, expiry: null}); by;
+			case v: v.value += by;
 		}));
 	}
 	
@@ -44,10 +52,15 @@ class Memory implements Provider {
 	
 	function clearExpired() {
 		var now = getTime();
+		// TODO: do sampling to save performance
 		for(key in map.keys())
-			if(map[key].expiry != null && now > map[key].expiry)
+			if(expired(now, map[key].expiry))
 				map.remove(key);
 		Timer.delay(clearExpired, clearInterval);
+	}
+	
+	inline function expired(now:Float, expiry:Float) {
+		return expiry != null && now > expiry;
 	}
 	
 	inline function getTime() {

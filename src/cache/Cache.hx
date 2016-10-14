@@ -52,6 +52,22 @@ class Cache implements Provider {
 		});
 	}
 	
+	public function increment(key:String, by = 1):Surprise<Int, Error> {
+		return Future.ofMany([for(provider in providers) provider.increment(key, by)]) >>
+			function(outcomes:Array<Outcome<Int, Error>>) {
+				var success = null;
+				var errors = [];
+				for(o in outcomes) switch o {
+					case Success(_): success = o;
+					case Failure(err): errors.push(err);
+				}
+				return switch success {
+					case null: Failure(Error.withData('error in increment', errors));
+					case v: v;
+				}
+			}
+	}
+	
 	public function exists(key:String):Surprise<Bool, Error> {
 		throw 'not implemented';
 	}

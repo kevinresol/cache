@@ -24,6 +24,12 @@ class Redis implements Provider {
 		});
 	}
 	
+	public function increment(key:String, by = 1):Surprise<Int, Error> {
+		return Future.async(function(cb) {
+			client.incrby(key, by, function(err, val) cb(err == null ? Success(val) : Failure(Error.withData('Redis error', err))));
+		});
+	}
+	
 	public function exists(key:String):Surprise<Bool, Error> {
 		return Future.async(function(cb) {
 			client.exists(key, function(err, val) cb(err == null ? Success(val == 1) : Failure(Error.withData('Redis error', err))));

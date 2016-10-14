@@ -22,7 +22,21 @@ class TestMemory extends BuddySuite {
 			
 			it('Get', function(done) {
 				cache.get('my key').handle(function(o) switch o {
-					case Success(v): v.should.be('my value'); done();
+					case Success(v): (v:String).should.be('my value'); done();
+					case Failure(err): fail(err);
+				});
+			});
+			
+			it('Increment', function(done) {
+				cache.increment('inc').handle(function(o) switch o {
+					case Success(v): v.should.be(1); done();
+					case Failure(err): fail(err);
+				});
+			});
+			
+			it('Increment N', function(done) {
+				cache.increment('inc', 5).handle(function(o) switch o {
+					case Success(v): v.should.be(6); done();
 					case Failure(err): fail(err);
 				});
 			});
@@ -30,7 +44,7 @@ class TestMemory extends BuddySuite {
 			it('Expired', function(done) {
 				Timer.delay(function() {
 					cache.get('my key').handle(function(o) switch o {
-						case Success(v): v.should.be(null); done();
+						case Success(v): (v:String).should.be(null); done();
 						case Failure(err): fail(err);
 					});
 				}, 1100);
