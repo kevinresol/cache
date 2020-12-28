@@ -17,6 +17,16 @@ class Memory<T> implements Cache<T> {
 		return Promise.NOISE;
 	}
 	
+	public function setIfNotExists(key:String, value:T):Promise<Bool> {
+		// TODO: not thread-safe
+		return if(map.exists(key)) {
+			false;
+		} else {
+			map.set(key, value);
+			true;
+		}
+	}
+	
 	public function get(key:String):Promise<Null<T>> {
 		return map.get(key);
 	}

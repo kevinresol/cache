@@ -31,7 +31,11 @@ class Redis<T> implements Cache<T> {
 	}
 	
 	public function set(key:String, value:T):Promise<Noise> {
-		return Promise.ofJsPromise(redis.setBuffer(key, cast serialize(value).toBuffer()));
+		return Promise.ofJsPromise(redis.set(key, cast serialize(value).toBuffer()));
+	}
+	
+	public function setIfNotExists(key:String, value:T):Promise<Bool> {
+		return Promise.ofJsPromise(redis.setnx(key, cast serialize(value).toBuffer())).next(res -> res == 1);
 	}
 	
 	public function remove(key:String):Promise<Noise> {
