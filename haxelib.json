@@ -1,7 +1,14 @@
 {
-  "name": "cache",
+  "name": "why-cache",
+  "license": "MIT",
+  "tags": [
+    "cache"
+  ],
   "classPath": "src",
-  "dependencies": {
-      "tink_core": ""
-  }
+  "contributors": [
+    "kevinresol"
+  ],
+  "releasenote": "initial release",
+  "version": "0.0.0",
+  "dependencies": {}
 }

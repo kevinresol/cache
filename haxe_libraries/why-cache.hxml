@@ -1,0 +1,3 @@
+-cp ${SCOPE_DIR}/./src
+-D why-cache=0.0.0
+--macro Sys.println("haxe_libraries/why-cache.hxml:2: [Warning] Using dev version of library why-cache")
