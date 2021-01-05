@@ -1,6 +1,8 @@
 package why.cache;
 
 import why.Cache;
+import tink.streams.Stream;
+import tink.streams.RealStream;
 
 using tink.CoreApi;
 
@@ -10,6 +12,10 @@ class Memory<T> implements Cache<T> {
 	
 	public function new() {
 		map = [];
+	}
+	
+	public function list():RealStream<Pair<String, T>> {
+		return Stream.ofIterator([for(key => value in map) new Pair(key, value)].iterator());
 	}
 	
 	public function set(key:String, value:T):Promise<Noise> {

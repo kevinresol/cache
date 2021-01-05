@@ -1,8 +1,11 @@
 package why;
 
+import tink.streams.RealStream;
+
 using tink.CoreApi;
 
 interface Cache<T> {
+	function list():RealStream<Pair<String, T>>;
 	function set(key:String, value:T):Promise<Noise>;
 	function setIfNotExists(key:String, value:T):Promise<Bool>; // return: true if set; false if not set because key already existed
 	function get(key:String):Promise<Null<T>>;
