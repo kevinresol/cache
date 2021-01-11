@@ -32,7 +32,7 @@ class Redis<T> implements Cache<T> {
 	public function list():RealStream<Pair<String, T>> {
 		var cursor = null;
 		
-		return Stream.flat(Generator.stream(function next(step) {
+		return Stream.flatten(Generator.stream(function next(step) {
 			Promise.ofJsPromise(redis.scan(cursor == null ? '0' : cursor, 'match', '$prefix*'))
 				.next(tuple -> {
 					if(cursor == '0') {
