@@ -36,7 +36,7 @@ class Redis<T> implements Cache<T> {
 			Promise.ofJsPromise(redis.scan(cursor == null ? '0' : cursor, 'match', '$prefix*'))
 				.next(tuple -> {
 					if(cursor == '0') {
-						(Promise.NULL:Promise<Pair<Array<String>, Array<String>>>);
+						(cast Promise.NULL:Promise<Pair<Array<String>, Array<String>>>);
 					} else {
 						cursor = tuple.element0;
 						switch tuple.element1 {
@@ -66,7 +66,7 @@ class Redis<T> implements Cache<T> {
 	
 	public function get(key:String):Promise<Null<T>> {
 		return Promise.ofJsPromise(redis.getBuffer(prefix + key))
-			.next(buffer -> buffer == null ? (Promise.NULL:Promise<Null<T>>) : unserialize(Chunk.ofBuffer(cast buffer)));
+			.next(buffer -> buffer == null ? (cast Promise.NULL:Promise<Null<T>>) : unserialize(Chunk.ofBuffer(cast buffer)));
 	}
 	
 	public function set(key:String, value:T):Promise<Noise> {
